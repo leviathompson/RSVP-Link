@@ -1,26 +1,26 @@
-const app      = require('express')()
-const port     = process.env.PORT || 4444 
-require('dotenv').config()
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 4444;
+require('dotenv').config();
+const connectDB = require('./config/db');
 
-app.use(require("express").urlencoded({extended: true}))
-app.use(require("express").json())
+// Middleware setup
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
+// Connect to the database
+connectDB();
 
-async function connectDB () {
-	try {
-		await require("mongoose").connect(process.env.MONGO);
-		console.log("Connected to the DB ✅");
-	} catch (error) {
-		console.log("ERROR: Your DB is not running, start it up ☢️");
-	}
-}
-connectDB()
+//==========================================================================
+// Setup CORS
+app.use(require('cors')());
+//==========================================================================
+// Setup routes
+app.use('/users', require('./routes/userRoute.js'));
+app.use('/carriers', require('./routes/carrierRoute.js'));
+//==========================================================================
 
-	//==========================================================================
-	app.use(require('cors')())
-	//==========================================================================
-	app.use('/users',require('./routes/users.js'))
-	//==========================================================================
-
-
-app.listen(port, () => console.log("🚀 Listening on port: " + port + " 🚀"));
+// Start the server
+app.listen(port, () => {
+    console.log("🚀 Listening on port: " + port + " 🚀");
+});

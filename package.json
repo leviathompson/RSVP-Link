@@ -4,7 +4,9 @@
   "description": "Magic link sign in with Node, Express.js, MongoDB, JWT",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed-carriers": "node scripts/seedCarriers.js",
+    "seed-users": "node scripts/seedUsers.js"
   },
   "author": "GK3000",
   "license": "ISC",
