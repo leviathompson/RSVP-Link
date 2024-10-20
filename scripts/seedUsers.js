@@ -6,8 +6,34 @@ require('dotenv').config();
 connectDB();
 
 const users = [
-  { name: 'Test Email', email: 'levithompson17@gmail.com' },
-  { name: 'Test Phone', phone: '3062316451', carrier: '670a8ff2e9888111e0f8eb4c' }
+  {
+    "name": "Levi Thompson",
+    "contactMethods": {
+      "emails": [
+        {
+          "address": "levithompson17@gmail.com"
+        }
+      ],
+      "phones": [
+        {
+          "number": "3062316451"
+        }
+      ]
+    },
+  }, 
+  {
+    "name": "Sky Stinson",
+    "contactMethods": {
+      "phones": [
+        {
+          "number": "3062621486"
+        },
+        {
+          "number": "3067347377"
+        }
+      ]
+    },
+  }
 ];
 
 User.insertMany(users)

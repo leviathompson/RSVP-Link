@@ -5,7 +5,8 @@ const getCarriers = async (req, res) => {
     const carriers = await Carrier.find();
     return res.json({ ok: true, carriers: carriers });
   } catch (error) {
-    return res.json({ ok: false, message: "Failed to get carriers" });
+    console.error("Error getting carriers:", error);
+    return res.json({ ok: false, message: "Failed to get carriers:" });
   }
 };
 
@@ -15,6 +16,7 @@ const getCarrierById = async (req, res) => {
     const carrier = await Carrier.findById(id);
     return res.json({ ok: true, carrier: carrier });
   } catch (error) {
+    console.error("Error getting carrier:", error);
     return res.json({ ok: false, message: `Failed to get carrier by Id: ${id}` });
   }
 };

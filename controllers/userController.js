@@ -1,146 +1,173 @@
 const User = require("../models/userModel.js");
-const jwt = require("jsonwebtoken");
-const validator = require("validator");
-const jwt_secret = process.env.JWT_SECRET;
-const { v4: uuidv4 } = require("uuid");
-const { send_magic_link } = require("./nodemailController.js");
-const { censorEmail, censorPhone } = require("../utils/formatter.js");
+const { censorEmail, censorPhone, formatToE164 } = require("../utils/formatter.js");
+const twilio = require('twilio');
+const accountSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const serviceSid = process.env.TWILIO_SERVICE_SID;
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.JWT_SECRET_KEY;
 
-const get_carrier = async (req, res) => {
-  const { name } = req.body;
-  if (!name) {
-    return res.json({ ok: false, message: "Name is required" });
+const client = twilio(accountSid, authToken);
+
+const verify_code = async (req, res) => {
+  const { userId, verificationCode, contactMethodId, contactMethodType } = req.body;
+  if (!userId) {
+    return res.json({ ok: false, message: "userId is required" });
   }
 
-  console.log(`Received carrier request for name: ${name}`);
+  if (!verificationCode) {
+    return res.json({ ok: false, message: "verificationCode is required" });
+  }
 
   try {
-    // Find the user by name, case-insensitive
-    const user = await User.findOne({
-      name: { $regex: new RegExp(`^${name}$`, "i") },
-    });
-    console.log(`User found: ${user ? JSON.stringify(user) : "None"}`);
+    const user = await User.findById(userId);
 
     if (!user) {
-      return res.json({
-        ok: false,
-        message: `User with name '${name}' not found`,
-      });
+      return res.json({ ok: false, message: "User not found" });
     }
 
-    if (!user.carrier) {
-      return res.json({
-        ok: false,
-        message: `User with name '${name}' has no carrier`,
-      });
-    } else {
-      return res.json({ ok: true, carrierId: user.carrier });
-    }
-  } catch (error) {
-    console.error("Error during login:", error);
-    res.json({ ok: false, message: error });
-  }
-};
-
-const login = async (req, res) => {
-  const { name, carrier, magicLink } = req.body;
-  if (!name) {
-    return res.json({ ok: false, message: "Name is required" });
-  }
-
-  console.log(`Received login request for name: ${name}`);
-
-  try {
-    // Find the user by name, case-insensitive
-    const user = await User.findOne({
-      name: { $regex: new RegExp(`^${name}$`, "i") },
-    });
-    console.log(`User found: ${user ? JSON.stringify(user) : "None"}`);
-
-    if (!user) {
-      return res.json({
-        ok: false,
-        message: `User with name '${name}' not found`,
-      });
-    }
-
-    // Determine the email or phone for authentication
-    let contactMethod = user.email;
-    let censoredContact = contactMethod ? censorEmail(contactMethod) : null;
-    let contactType = "email";
-
-    if (!contactMethod) {
-      if (!user.phone) {
-        return res.json({
-          ok: false,
-          message: "No email or phone available for authentication",
-        });
+    let contactMethod = '';
+    if (contactMethodType === 'email') {
+      const email = user.contactMethods.emails.find(email => email.id === contactMethodId);
+      if (!email) {
+        return res.json({ ok: false, message: "Contact email not found" });
       }
-      console.log(`sending text to ${user.phone}@${carrier.smsGatewayDomain}`);
-      contactMethod = `${user.phone}@${carrier.smsGatewayDomain}`;
-      censoredContact = censorPhone(user.phone);
-      contactType = "phone";
+      contactMethod = email.address;
+    } else if (contactMethodType === 'sms') {
+      const phone = user.contactMethods.phones.find(phone => phone.id === contactMethodId);
+      if (!phone) {
+        return res.json({ ok: false, message: "Contact phone not found" });
+      }
+      contactMethod = formatToE164(phone.number);
     }
 
-    if (!magicLink) {
-      // Update magic link
-      try {
-        const updatedUser = await User.findOneAndUpdate(
-          { name: user.name },
-          { magicLink: uuidv4(), magicLinkExpired: false },
-          { returnDocument: "after" }
-        );
-        console.log(`Updated user: ${JSON.stringify(updatedUser)}`);
-        // Send magic link
-        send_magic_link(
-          contactMethod,
-          user.name,
-          updatedUser.magicLink,
-          "signin"
-        );
-        res.send({
-          ok: true,
-          message: `A magic link has been sent to your ${contactType}: ${censoredContact}`,
-        });
-      } catch (error) {
-        res.json({ ok: false, message: error });
-      }
-    } else if (user.magicLink === magicLink && !user.magicLinkExpired) {
-      // If magic link is valid, sign JWT and authenticate
-      const token = jwt.sign(user.toJSON(), jwt_secret, { expiresIn: "1h" });
+    const verificationCheck = await client.verify.v2
+      .services(serviceSid)
+      .verificationChecks.create({
+        code: verificationCode,
+        to: contactMethod,
+      });
 
-      // Mark the magic link as expired before sending the response
-      await User.findOneAndUpdate(
-        { name: user.name },
-        { magicLinkExpired: true }
-      );
+    if (verificationCheck.status === 'approved') {
+      const token = jwt.sign({ id: userId }, secretKey, { expiresIn: '1h' });
 
-      res.json({
+      return res.json({
         ok: true,
-        message: "Welcome back",
+        message: `User verified successfully`,
         token,
-        email: contactMethod,
       });
     } else {
-      return res.json({
-        ok: false,
-        message: "Magic link expired or incorrect 🤔",
-      });
+      return res.status(400).json({ ok: false, message: verificationCheck.message });
     }
+
   } catch (error) {
-    console.error("Error during login:", error);
-    res.json({ ok: false, message: error });
+    console.error("Error verifying code:", error);
+    return res.status(500).json({ ok: false, message: "Server error" });
   }
 };
 
-const verify_token = (req, res) => {
-  console.log(req.headers.authorization);
-  const token = req.headers.authorization;
-  jwt.verify(token, jwt_secret, (err, succ) => {
-    err
-      ? res.json({ ok: false, message: "something went wrong" })
-      : res.json({ ok: true, succ });
-  });
+
+const trigger_otp = async (req, res) => {
+  const { userId, contactMethodId, contactMethodType } = req.body;
+  if (!userId) {
+    return res.json({ ok: false, message: "userId is required" });
+  }
+
+  if (!contactMethodId) {
+    return res.json({ ok: false, message: "contactMethodId is required" });
+  }
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.json({ ok: false, message: "User not found" });
+    }
+
+    let contactMethod = '';
+    if (contactMethodType === 'email') {
+      const email = user.contactMethods.emails.find(email => email.id === contactMethodId);
+      if (!email) {
+        return res.json({ ok: false, message: "Contact email not found" });
+      }
+      contactMethod = email.address;
+    } else if (contactMethodType === 'sms') {
+      const phone = user.contactMethods.phones.find(phone => phone.id === contactMethodId);
+      if (!phone) {
+        return res.json({ ok: false, message: "Contact phone not found" });
+      }
+      contactMethod = formatToE164(phone.number);
+    }
+
+    const verification = await client.verify.v2
+    .services(serviceSid)
+    .verifications.create({
+      channel: contactMethodType,
+      to: contactMethod,
+    });
+
+    if (verification.status === 'pending') {
+      return res.json({
+        ok: true,
+        message: `A one-time passcode has been sent.`,
+        contactMethodId: contactMethodId,
+        contactMethodType: contactMethodType,
+      });
+    } else {
+      return res.status(400).json({ ok: false, message: verification.message });
+    }
+
+  } catch (error) {
+    console.error("Error sending code:", error);
+    return res.status(500).json({ ok: false, message: "Server error" });
+  }
 };
 
-module.exports = { login, verify_token, get_carrier };
+const get_user = async (req, res) => {
+  const { name } = req.query;
+  if (!name) {
+    return res.json({ ok: false, message: "Name is required" });
+  }
+
+  try {
+    // Find the user by name, case-insensitive
+    const user = await User.findOne({
+      name: { $regex: new RegExp(`^${name}$`, "i") },
+    });
+
+    if (!user) {
+      return res.json({
+        ok: false,
+        message: `User with name '${name}' not found`,
+      });
+    } else {
+      // Obfuscate contact methods
+      const obfuscatedContactMethods = {
+        emails: user.contactMethods.emails.map(email => ({
+          id: email.id,
+          address: censorEmail(email.address),
+        })),
+        phones: user.contactMethods.phones.map(phone => ({
+          id: phone.id,
+          number: censorPhone(phone.number),
+          carrier: phone.carrier,
+        }))
+      };
+
+      // Return user with obfuscated contact methods
+      return res.json({
+        ok: true,
+        user: {
+          _id: user._id,
+          name: user.name,
+          contactMethods: obfuscatedContactMethods,
+        }
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.json({ ok: false, message: error.message });
+  }
+};
+
+module.exports = { verify_code, get_user, trigger_otp };

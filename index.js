@@ -17,7 +17,6 @@ app.use(require('cors')());
 //==========================================================================
 // Setup routes
 app.use('/users', require('./routes/userRoute.js'));
-app.use('/carriers', require('./routes/carrierRoute.js'));
 //==========================================================================
 
 // Start the server

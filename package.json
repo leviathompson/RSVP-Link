@@ -4,6 +4,9 @@
   "description": "Magic link sign in with Node, Express.js, MongoDB, JWT",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon --exec \"npm run lint && node index.js\"",
+    "start": "node index.js",
+    "lint": "eslint . --ignore-pattern client/",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed-carriers": "node scripts/seedCarriers.js",
     "seed-users": "node scripts/seedUsers.js"
@@ -17,7 +20,17 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "*",
     "nodemailer": "^6.7.1",
+    "otplib": "^12.0.1",
+    "twilio": "^5.3.4",
     "uuid": "^8.3.2",
     "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "concurrently": "^9.0.1",
+    "eslint": "^9.13.0",
+    "eslint-plugin-react": "^7.37.1",
+    "globals": "^15.11.0",
+    "nodemon": "^3.1.7"
   }
 }

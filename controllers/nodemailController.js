@@ -8,18 +8,12 @@ const transport = nodemailer.createTransport({
 });
 const URL = 'http://localhost:1337/enter/';
 
-const send_magic_link = async (contact, name, link, which) => {
+const send_otp = async (contact, name, code) => {
 
   let subj, body;
-  if (which === 'signup') {
-    subj = "Your sign-up link";
-    body = `<p>Hello friend and welcome to our website. This is your link to confirm your account: ${URL}${encodeURIComponent(name)}/${link}</p>
-            <p>Needless to remind you not to share this link with anyone 🤫</p>`;
-  } else {
-    subj = "Your sign-in link";
-    body = `<p>Hello friend and welcome back. This is your link to sign in to your account: ${URL}${encodeURIComponent(name)}/${link}</p>
-            <p>Needless to remind you not to share this link with anyone 🤫</p>`;
-  }
+
+  subj = "RSVP Verification Code";
+  body = `<p>Your verification code is:</p><p>\r\n${code}</p><p>\r\nEnter the code on your device or click this link:</p><p>\r\n${URL}${encodeURIComponent(name)}/${code}</p>`;
 
   const mailOptions = {
     to: contact,
@@ -30,7 +24,9 @@ const send_magic_link = async (contact, name, link, which) => {
 
   try {
     const response = await transport.sendMail(mailOptions);
+    console.dir(mailOptions);
     console.log('Link sent 📬');
+    console.log(response);
     return { ok: true, message: 'email sent' };
   } catch (err) {
     console.log("Something didn't work out 😭", err);
@@ -38,4 +34,4 @@ const send_magic_link = async (contact, name, link, which) => {
   }
 };
 
-module.exports = { send_magic_link };
+module.exports = { send_otp };
