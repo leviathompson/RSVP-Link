@@ -23,7 +23,7 @@ const verify_code = async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.json({ ok: false, message: "User not found" });
+      return res.json({ ok: false, message: "Guest not found" });
     }
 
     let contactMethod = '';
@@ -57,12 +57,13 @@ const verify_code = async (req, res) => {
         token,
       });
     } else {
-      return res.status(400).json({ ok: false, message: verificationCheck.message });
+      console.dir(verificationCheck);
+      return res.status(400).json({ ok: false, message: "Verification failed, please check your code and try again." });
     }
 
   } catch (error) {
     console.error("Error verifying code:", error);
-    return res.status(500).json({ ok: false, message: "Server error" });
+    return res.status(500).json({ ok: false, message: "Error verifying code. Please try again later." });
   }
 };
 
@@ -81,7 +82,7 @@ const trigger_otp = async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.json({ ok: false, message: "User not found" });
+      return res.json({ ok: false, message: "Guest not found" });
     }
 
     let contactMethod = '';
@@ -138,7 +139,7 @@ const get_user = async (req, res) => {
     if (!user) {
       return res.json({
         ok: false,
-        message: `User with name '${name}' not found`,
+        message: `Guest with name '${name}' not found`,
       });
     } else {
       // Obfuscate contact methods

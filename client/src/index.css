@@ -5,10 +5,25 @@
 
 @layer components {
   .btn-primary {
-    @apply text-cream-300 font-bold bg-nougat-500 hover:bg-nougat-600 focus:outline-none focus:ring-4 focus:ring-cream-500 rounded-full text-sm px-5 py-3.5 text-center me-2 mb-2;
+    @apply text-lg text-cream-300 font-bold bg-nougat-500 hover:bg-nougat-600 focus:outline-none focus:ring-4 focus:ring-cream-500 rounded-full px-10 py-4 text-center shadow-lg active:shadow-sm transition-all duration-200 disabled:bg-cream-300 disabled:text-cream-500;
   }
   .btn-secondary {
-    @apply py-2.5 px-5 me-2 mb-2 text-sm font-medium text-cream-700 focus:outline-none bg-cream-200 rounded-full border-2 border-cream-700 hover:bg-cream-500 hover:text-cream-700 focus:z-10 focus:ring-4 focus:ring-gray-100;
+    @apply text-lg px-10 py-4 font-medium text-cream-700 focus:outline-none bg-cream-200 rounded-full border-2 border-cream-700 hover:bg-cream-300 hover:text-cream-700 focus:z-10 focus:ring-4 focus:ring-gray-100 shadow-lg transition-all duration-200;
+  }
+
+  .btn-secondary-sm {
+    @apply text-base px-3 pt-1 font-medium text-cream-700 focus:outline-none bg-cream-200 rounded-full border-2 border-cream-700 hover:bg-cream-300 hover:text-cream-700 focus:z-10 focus:ring-4 focus:ring-gray-100 shadow-lg transition-all duration-200;
+  }
+}
+
+@import "~@flaticon/flaticon-uicons/css/all/all";
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
@@ -16,6 +31,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "vollkorn-sc", sans-serif;
   font-weight: 400;
   font-style: normal;
+  color: #856651;
 }
 
 h1 {
@@ -23,9 +39,19 @@ h1 {
   text-align: center;
 }
 
+.gold {
+  background: linear-gradient(to right, #C69158, #EFCA6F, #C69158, #EFCA6F, #C69158);
+  background-position: 100% 50%;
+  background-size: 200% 100%;
+  animation: gradient-animation 3s linear infinite;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
 h2 {
-  font-size: 1.2rem;
-  line-height: 1.5rem;
+  font-size: 1.6rem;
+  line-height: 1.8rem;
 }
 
 input {
@@ -35,9 +61,10 @@ input {
 body {
   margin: 0;
   font-family: "anth", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   font-style: normal;
-  color: #856651;
+  font-size: 1.125rem;
+  color: #856651b7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

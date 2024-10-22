@@ -32,10 +32,17 @@ export default {
         'blush-300': "#FCA7B3"/* red chip */,
         'skyblue-500': "#B8CCCA",
         'skyblue-300': "#DAE7E5"/* blue chip */,
-
-
-
       },
+      borderRadius: {
+        '4xl': '4rem',
+      },
+      borderWidth: {
+        '3': '2px',
+      },
+      margin: {
+        '0.75': '2.4px;',
+        '0.2': '0.8px'
+      }
     },
   },
   plugins: [
