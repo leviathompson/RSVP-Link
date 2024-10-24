@@ -5,14 +5,19 @@
 
 @layer components {
   .btn-primary {
-    @apply text-lg text-cream-300 font-bold bg-nougat-500 hover:bg-nougat-600 focus:outline-none focus:ring-4 focus:ring-cream-500 rounded-full px-10 py-4 text-center shadow-lg active:shadow-sm transition-all duration-200 disabled:bg-cream-300 disabled:text-cream-500;
+    @apply text-lg text-cream-300 font-bold bg-nougat-500 hover:bg-nougat-600 focus:outline-none focus:ring-4 focus:ring-cream-500 border-2 border-nougat-500 rounded-full px-10 py-4 text-center shadow-lg active:shadow-sm transition-all duration-200 disabled:bg-cream-300 disabled:border-cream-300 disabled:text-cream-500 w-full;
   }
   .btn-secondary {
-    @apply text-lg px-10 py-4 font-medium text-cream-700 focus:outline-none bg-cream-200 rounded-full border-2 border-cream-700 hover:bg-cream-300 hover:text-cream-700 focus:z-10 focus:ring-4 focus:ring-gray-100 shadow-lg transition-all duration-200;
+    @apply text-lg px-10 py-4 font-medium text-cream-700 focus:outline-none bg-cream-200 rounded-full border-2 border-cream-700 hover:bg-cream-300 hover:text-cream-700 focus:z-10 focus:ring-4 focus:ring-cream-500 shadow-lg transition-all duration-200 w-full;
   }
-
+  .btn-primary-sm {
+    @apply text-base px-5 pb-2 pt-3 text-cream-300 font-medium bg-nougat-500 hover:bg-nougat-600 focus:outline-none focus:ring-4 focus:ring-cream-500 border-2 border-nougat-500 rounded-full text-center shadow-lg active:shadow-sm transition-all duration-200 disabled:bg-cream-300 disabled:border-cream-300 disabled:text-cream-500;
+  }
   .btn-secondary-sm {
-    @apply text-base px-3 pt-1 font-medium text-cream-700 focus:outline-none bg-cream-200 rounded-full border-2 border-cream-700 hover:bg-cream-300 hover:text-cream-700 focus:z-10 focus:ring-4 focus:ring-gray-100 shadow-lg transition-all duration-200;
+    @apply text-base px-3 pt-1 font-medium text-cream-700 focus:outline-none bg-cream-200 rounded-full border-2 border-cream-700 hover:bg-cream-300 hover:text-cream-700 focus:z-10 focus:ring-4 focus:ring-cream-500 shadow-lg transition-all duration-200;
+  }
+  .btn-tertiary-sm {
+    @apply text-base px-3 pt-1 font-medium text-nougat-500 focus:outline-none bg-none rounded-full border border-cream-500 hover:bg-cream-200 hover:text-cream-700 focus:z-10 focus:ring-4 focus:ring-cream-500 transition-all duration-200;
   }
 }
 
@@ -40,7 +45,7 @@ h1 {
 }
 
 .gold {
-  background: linear-gradient(to right, #C69158, #EFCA6F, #C69158, #EFCA6F, #C69158);
+  background: linear-gradient(to right, #8f5b23, #d7a935, #855929, #d1a432, #b17a3f);
   background-position: 100% 50%;
   background-size: 200% 100%;
   animation: gradient-animation 3s linear infinite;

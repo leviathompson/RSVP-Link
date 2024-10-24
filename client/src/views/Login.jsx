@@ -1,10 +1,8 @@
 import React from 'react';
 import { useLogin } from '../context/LoginProvider';
-import LoginStep from '../components/login/LoginStep';
-import SendOTPStep from '../components/login/SendOTPStep';
-import VerifyOTPStep from '../components/login/VerifyOTPStep';
+import LoginStep from '../components/login/LoginStep'
 
-const steps = [LoginStep, SendOTPStep, VerifyOTPStep];
+const steps = [LoginStep];
 
 const Login = () => {
     const { currentStep } = useLogin();

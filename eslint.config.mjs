@@ -3,7 +3,7 @@ import pluginJs from "@eslint/js";
 
 export default [
   {
-    files: ["controllers/**/*.js", "models/**/*.js", "routes/**/*.js", "scripts/**/*.js", "index.js", "utils/**/*.js", "config/**/*.js"],
+    files: ["controllers/**/*.js", "models/**/*.js", "routes/**/*.js", "scripts/**/*.js", "index.js", "utils/**/*.js", "config/**/*.js", "middleware/**/*.js"],
     languageOptions: {
       sourceType: "commonjs", // Use CommonJS for backend
       ecmaVersion: 2020,

@@ -11,9 +11,7 @@ const Home = () => {
 
 	return (
 		<Page title="Home">
-			<Card>
-			<p>You are home now 🏡🛏🚽🛋📚🪴</p>
-			<a href="/test">test page</a>
+			<Card title="Temp Home">
 			<button className="btn-primary" onClick={handleLogout}>Logout</button>
 			</Card>
 		</Page>

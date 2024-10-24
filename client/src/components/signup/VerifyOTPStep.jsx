@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLogin } from "../../context/LoginProvider";
+import { useSignup } from "../../context/SignupProvider";
 import { useAuth } from "../../context/AuthProvider";
 import FadeMessage from "../FadeMessage";
-import Page from "../../components/Page";
-import Card from "../../components/Card";
+import Page from "../Page";
+import Card from "../Card";
 
 const VerifyOTPStep = () => {
-  const { goToPreviousStep, LoginData } = useLogin();
+  const { goToPreviousStep, SignupData: LoginData } = useSignup();
   const [verificationCode, setVerificationCode] = useState([
     "",
     "",
@@ -20,7 +20,7 @@ const VerifyOTPStep = () => {
   const [error, setError] = useState(null);
   const isMounted = useRef(true);
   const navigate = useNavigate();
-  const URL = "http://localhost:4444";
+  const URL = "http://192.168.86.52:4444";
   const { login } = useAuth();
   const inputRefs = useRef([]);
 
@@ -60,7 +60,7 @@ const VerifyOTPStep = () => {
       if (isMounted.current) {
         if (data.ok) {
           login(data.token);
-          navigate("/party");
+          navigate("/profile");
         } else {
           setError(data.message);
           console.log(data.message);
@@ -106,7 +106,7 @@ const VerifyOTPStep = () => {
   };
 
   return (
-    <Page title="Party Access">
+    <Page title="Create Account">
       <Card
         title={
           <>

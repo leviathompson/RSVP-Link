@@ -15,6 +15,7 @@ export default {
         /* higher number is darker */
         'cream-700': "#856651"/* paragraphs, titles, hero subtitle and form field label */,
         'cream-500': "#B6A091"/* secondary button border and text */,
+        'cream-400': "#d9c9bf",
         'cream-300': "#F0EBE4"/* main background and button text */,
         'cream-200': "#F9F5EF"/* lighter background */,
         'cream-100': "#fcfaf7"/* form field */,
@@ -34,7 +35,7 @@ export default {
         'skyblue-300': "#DAE7E5"/* blue chip */,
       },
       borderRadius: {
-        '4xl': '4rem',
+        '4xl': '3.5rem',
       },
       borderWidth: {
         '3': '2px',
