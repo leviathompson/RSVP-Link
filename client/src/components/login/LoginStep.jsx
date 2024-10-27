@@ -15,10 +15,11 @@ const LoginStep = () => {
   const { goToNextStep } = useSignup();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const isMounted = useRef(true);
-  const URL = "http://192.168.86.52:4444";
+  const URL = "http://192.168.86.58:4444";
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -28,6 +29,14 @@ const LoginStep = () => {
       isMounted.current = false;
     };
   }, []);
+
+  const handlePasswordVisibilityToggle = () => {
+    if (passwordVisibility) {
+      setPasswordVisibility(false);
+    } else {
+      setPasswordVisibility(true);
+    }
+  }
 
   const handleCredentialsSubmit = async () => {
     const sanitizedEmail = sanitizeEmail(email);
@@ -123,6 +132,7 @@ const LoginStep = () => {
             <label className="font-bold" htmlFor="password">
               Password
             </label>
+            <div className="flex">
             <input
               className={`px-4 py-3 text-nougat-500 text-lg min-w-full rounded-xl border-nougat-500 focus:border-nougat-500 focus:outline-none focus:ring-2 focus:ring-cream-500 placeholder:text-cream-500 ${
                 error ? "border-rose-600 focus:border-rose-600 focus:ring-rose-500" : ""
@@ -130,7 +140,7 @@ const LoginStep = () => {
               id="password"
               name="password"
               placeholder="Enter your password"
-              type="password"
+              type={passwordVisibility ? "text" : "password"}
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -141,6 +151,10 @@ const LoginStep = () => {
               aria-required="true"
               aria-describedby="password-desc"
             />
+            <span className="flex justify-end items-center cursor-pointer" onClick={handlePasswordVisibilityToggle}>
+              {passwordVisibility ? <i className="fi fi-sr-eye-crossed flex absolute p-3 pr-5"></i> : <i className="fi fi-sr-eye flex absolute p-3 pr-5"></i>}
+            </span>
+            </div>
             <div id="password-desc" className="sr-only">
               Your password must be at least 8 characters long.
             </div>

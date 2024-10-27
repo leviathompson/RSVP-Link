@@ -3,7 +3,7 @@ import React from "react";
 const Card = (props) => {
   return (
     <div
-      className={`flex gap-8 pb-8 flex-col bg-cream-200 rounded-4xl shadow-md max-w-xl ${
+      className={`flex gap-8 pb-8 flex-col bg-cream-200 rounded-4xl shadow-md max-w-2xl min-w-[300px] w-full  ${
         !(props.back && props.loading) && !props.title ? "pt-8" : ""
       }`}
     >

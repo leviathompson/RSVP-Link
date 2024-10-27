@@ -23,7 +23,7 @@ function App() {
 
   return (
     <div className="flex justify-center min-h-screen overflow-hidden bg-cream-300 py-6 px-4">
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full">
       <AuthProvider>
         <Router>
         <Navbar/>

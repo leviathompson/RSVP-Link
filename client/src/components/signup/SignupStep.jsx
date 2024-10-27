@@ -11,7 +11,7 @@ const SignupStep = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const isMounted = useRef(true);
-  const URL = "http://192.168.86.52:4444";
+  const URL = "http://192.168.86.58:4444";
   const navigate = useNavigate();
 
   const pullNameFromHat = () => {

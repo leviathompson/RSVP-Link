@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className="fixed left-0 right-0 bottom-0 w-full h-16 bg-cream-200">
+    <div className="fixed left-0 right-0 bottom-0 w-full h-16 bg-cream-200 z-20">
       <div className="text-sm font-bold flex flex-row justify-around max-w-lg my-0 mx-auto h-full px-2">
         <NavLink
           className={({ isActive, isPending, isTransitioning }) =>
