@@ -11,7 +11,7 @@ const SignupStep = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const isMounted = useRef(true);
-  const URL = "http://192.168.86.58:4444";
+  const URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
 
   const pullNameFromHat = () => {
@@ -88,7 +88,11 @@ const SignupStep = () => {
 
       if (isMounted.current) {
         if (data.ok) {
-          goToNextStep({ user: data.user });
+          if (data.user) {
+            goToNextStep({ user: data.user });
+          } else {
+            setError(data.message);
+          }
         } else {
           setError(data.message);
         }

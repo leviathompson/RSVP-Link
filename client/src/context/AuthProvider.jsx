@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 
-const URL = "http://192.168.86.58:4444";
+const URL = process.env.REACT_APP_API_URL;
 
 const defaultContextValue = {
   isAuthenticated: false,

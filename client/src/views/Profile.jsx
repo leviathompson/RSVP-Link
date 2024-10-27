@@ -14,7 +14,7 @@ const Profile = () => {
   const [error, setError] = useState(null);
   const [edit, setEdit] = useState([]);
   const [loading, setLoading] = useState(false);
-  const URL = "http://192.168.86.58:4444";
+  const URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     if (partyData) {
@@ -345,18 +345,6 @@ const Profile = () => {
                             </button>
                           </div>
                         </div>
-                        {!edit.includes(index) && (
-                          <button
-                            className="btn-secondary"
-                            aria-label={`Edit details for ${member.name}`}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleEdit(index);
-                            }}
-                          >
-                            Edit
-                          </button>
-                        )}
                         {edit.includes(index) && (
                           <div className="flex flex-row gap-1">
                             <button
@@ -452,7 +440,7 @@ const Profile = () => {
                               handleEdit(index);
                             }}
                           >
-                            Edit
+                            Update RSVP & details
                           </button>
                         )}
                         <FadeMessage message={error} duration={300} />

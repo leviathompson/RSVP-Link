@@ -19,7 +19,7 @@ const LoginStep = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const isMounted = useRef(true);
-  const URL = "http://192.168.86.58:4444";
+  const URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const { login } = useAuth();
 

@@ -55,17 +55,19 @@ const UserSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ['Awaiting response', 'Attending', 'Not attending'],
-      default: "Awaiting response"
-    }
+      enum: ["Awaiting response", "Attending", "Not attending"],
+      default: "Awaiting response",
+    },
   },
-  { strictQuery: false }
+  {
+    strictQuery: false,
+  }
 );
 
 // Pre-save hook to ensure only one primary email
 UserSchema.pre("save", function (next) {
   const user = this;
-  if (user.contactMethods.emails.filter(email => email.primary).length > 1) {
+  if (user.contactMethods.emails.filter((email) => email.primary).length > 1) {
     return next(new Error("Only one email can be set as primary."));
   }
   next();

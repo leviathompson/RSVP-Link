@@ -24,7 +24,8 @@
     "start": "set PORT=1337 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "env-cmd -f .env.development.local react-scripts start"
   },
   "eslintConfig": {
     "extends": [
@@ -87,6 +88,7 @@
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "autoprefixer": "^10.4.20",
+    "env-cmd": "^10.1.0",
     "postcss": "^8.4.47"
   }
 }

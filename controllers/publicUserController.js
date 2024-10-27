@@ -146,7 +146,8 @@ const get_user = async (req, res) => {
   }
 
   try {
-    const user = await User.findOne({ name: { $regex: new RegExp(`^${name}$`, "i") } });
+    // Include the password field in the query result
+    const user = await User.findOne({ name: { $regex: new RegExp(`^${name}$`, "i") } }).select("+password");
 
     if (!user) {
       return res.json({ ok: false, message: `Guest with name '${name}' not found` });
@@ -162,6 +163,11 @@ const get_user = async (req, res) => {
         }))
       };
 
+      // Check if the password is set
+      if (user.password) {
+        return res.json({ ok: true, message: "User has already signed up." });
+      } 
+
       return res.json({ ok: true, user: { _id: user._id, name: user.name, contactMethods: obfuscatedContactMethods } });
     }
   } catch (error) {
@@ -169,5 +175,7 @@ const get_user = async (req, res) => {
     return res.status(500).json({ ok: false, message: "Error fetching user. Please try again later." });
   }
 };
+
+
 
 module.exports = { verify_code, get_user, trigger_otp, login };
