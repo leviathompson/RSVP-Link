@@ -57,19 +57,7 @@ const users = [
   {
     "name": "Eli Harper",
     "password": "superSecurePassword101",
-    "contactMethods": {
-      "emails": [
-        {
-          "address": "eliharper@example.com",
-          "primary": true
-        }
-      ],
-      "phones": [
-        {
-          "number": "3069876543"
-        }
-      ]
-    }
+    "contactMethods": {}
   }
 ];
 

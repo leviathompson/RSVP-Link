@@ -168,6 +168,10 @@ const get_user = async (req, res) => {
         return res.json({ ok: true, message: "User has already signed up." });
       } 
 
+      if (!obfuscatedContactMethods) {
+        return res.json({ ok: true, message: "No contact methods are on file to verify your identity. The head of your party can update this for you." });
+      }
+
       return res.json({ ok: true, user: { _id: user._id, name: user.name, contactMethods: obfuscatedContactMethods } });
     }
   } catch (error) {

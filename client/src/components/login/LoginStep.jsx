@@ -23,6 +23,8 @@ const LoginStep = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  console.log(URL);
+
   useEffect(() => {
     isMounted.current = true;
     return () => {

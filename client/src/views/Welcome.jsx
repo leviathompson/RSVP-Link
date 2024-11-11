@@ -5,7 +5,7 @@ import Card from "../components/Card";
 
 const Welcome = () => {
   return (
-    <Page title="RSVP">
+    <Page title="RSVP" background="/images/Levi-13-3.jpg">
       <Card title={<span className="gold">Log in or Register</span>}>
         <div className="flex gap-4 flex-col">
           <div className="grow flex flex-col gap-1">
