@@ -14,7 +14,6 @@ const Welcome = () => {
               <button className="btn-secondary">Log in</button>
             </Link>
           </div>
-
           <div className="order-1 flex flex-col gap-1">
             <div>New user</div>
             <Link to="/signup">
